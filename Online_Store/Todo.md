@@ -5,7 +5,6 @@
    * `nombre`
    * `correo electrónico`
    * `contraseña`
-   * `fecha_registro`
 2. **Categorías:**
    * `categoria_id` (clave primaria)
    * `nombre`
@@ -14,7 +13,6 @@
    * `nombre`
    * `descripción`
    * `precio`
-   * `disponibilidad`
    * `categoria_id` (clave foránea que referencia a la tabla de Categorías)
 4. **Carrito de Compra:**
    * `carrito_id` (clave primaria)
