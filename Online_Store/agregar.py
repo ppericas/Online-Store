@@ -24,6 +24,18 @@ def agregar_producto():
 
     return render_template('agregar_producto.html')
 
+@app.route('/agregar_categoria', methods=['GET', 'POST'])
+def agregar_categoria():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+
+        nueva_categoria = Categoria(nombre=nombre)
+        db.session.add(nueva_categoria)
+        db.session.commit()
+        return redirect(url_for('agregar_categoria'))
+
+    return render_template('agregar_categoria.html')
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

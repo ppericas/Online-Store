@@ -1,0 +1,12 @@
+{% extends "base_template.html" %}
+
+{% block title %}Agregar Categoría{% endblock %}
+
+{% block content %}
+<h1>Agregar Categoría</h1>
+<form method="POST" enctype="multipart/form-data">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+    <button type="submit">Agregar</button>
+</form>
+{% endblock %}

@@ -3,9 +3,19 @@
 
 {% block content %}
 <h1>Lista de Productos</h1>
-<ul>
-    {% for producto in productos %}
-    <li>{{ producto.nombre }} - {{ producto.precio }}</li>
-    {% endfor %}
-</ul>
+    <ul>
+        {% for producto in productos %}
+        <li>
+            <h2>{{ producto.nombre }}</h2>
+            <p>Descripción: {{ producto.descripcion }}</p>
+            <p>Precio: {{ producto.precio }}</p>
+            <p>Disponibilidad: {% if producto.disponibilidad %}Disponible{% else %}No disponible{% endif %}</p>
+            <p>Categoría: {{ producto.categoria.nombre }}</p>
+            <!-- Agregar imagen si es necesario -->
+            {% if producto.imagen %}
+            <img src="{{ url_for('static', filename='imgs/' + producto.imagen) }}" alt="Imagen del producto">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
