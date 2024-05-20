@@ -1,11 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-<<<<<<< HEAD
-from flask import Flask, render_template, request, redirect, url_for
-=======
 from flask import Flask, render_template,redirect,request,url_for
 
->>>>>>> 0b0e69beb759264e347a6e1cbb86713d0f9cc594
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mi_base_de_datos.db'
@@ -99,15 +95,6 @@ def ver_productos():
     productos = Producto.query.all()
     print(productos)
     return render_template('ver_productos.html', productos=productos)
-
-
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
-
-
-
 @app.route('/carrito_de_compra')
 def carrito_de_compra():
     productos_en_carrito = ProductoEnCarrito.query.all()
@@ -135,3 +122,10 @@ def eliminar_producto_carrito():
         # Aquí puedes realizar la lógica para borrar los productos seleccionados
     elif accion == 'pagar':
         return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
+
+
