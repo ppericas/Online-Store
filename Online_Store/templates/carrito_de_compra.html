@@ -6,43 +6,46 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
 </head>
 <body>
-    
-<table id="example" class="display" style="width:100%">
-    <thead>
-        <tr>
-            <th>IMAGEN</th>
-            <th>NOMBRE PRODUCTO</th>
-            <th>CANTIDAD</th>
-            <th>PRECIO UNIT</th>
-            <th>TOTAL</th>
-            <th>BORRAR</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for producto in productos_en_carrito %}
-        <tr>
-            <td><img src="{{ producto.imagen_url }}" alt="Imagen del producto" style="width:50px;height:50px;"></td>
-            <td>{{ producto.nombre }}</td>
-            <td>{{ producto.cantidad }}</td>
-            <td>{{ producto.precio_unitario }}</td>
-            <td>{{ producto.cantidad * producto.precio_unitario }}</td>
-        
-        </tr>
-        {% endfor %}
 
-    </tbody>
-</table>
-<button type="submit">PROCEDER A PAGAR</button>
+<form action="{{ url_for('eliminar_producto_carrito') }}" method="post">
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>IMAGEN</th>
+                <th>NOMBRE PRODUCTO</th>
+                <th>CANTIDAD</th>
+                <th>PRECIO UNIT</th>
+                <th>TOTAL</th>
+                <th>BORRAR</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                {% for producto in productos_info %}
+                <td><img src="{{ producto.imagen_url }}" alt="Imagen del producto" style="width:50px;height:50px;"></td>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>{{ producto.precio_unitario }}</td>
+                <td>{{ producto.cantidad * producto.precio_unitario }}</td>        
+                <td><input type="checkbox" name="borrar_producto" value="{{ producto.producto_id }}"></td>
+                {% endfor %}
+            </tr>
 
+        </tbody>
+    </table>
+    <button type="submit" name="accion" value="borrar">Borrar Productos Seleccionados</button>
+    <button type="submit" name="accion" value="pagar">pagar</button>
+</form>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#example').DataTable({
             paging: {
-                paging: true,  // Activar la paginación
-                searching: true,  // Activar la búsqueda
-                ordering: true  // Activar la ordenación
+                paging: true, 
+                searching: true,  
+                ordering: true 
             }
         });
     });

@@ -1,12 +1,14 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template
+from flask import Flask, render_template,redirect,request,url_for
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mi_base_de_datos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
@@ -34,6 +36,7 @@ class Producto(db.Model):
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.categoria_id'), nullable=False)
     productos_en_carrito = db.relationship('ProductoEnCarrito', backref='producto', lazy=True)
     detalles_pedido = db.relationship('DetallePedido', backref='producto', lazy=True)
+    url_imagen = db.Column(db.String(255))
 
 class CarritoDeCompra(db.Model):
     __tablename__ = 'carritos_de_compra'
@@ -70,10 +73,31 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-'''
+
 @app.route('/carrito_de_compra')
 def carrito_de_compra():
-    productos_en_carrito= ProductoenCarrito.query.all()
+    productos_en_carrito = ProductoEnCarrito.query.all()
+    productos_info = []
+    for producto_en_carrito in productos_en_carrito:
 
-    return render_template('carrito_de_compra.html',productos_en_carrito=productos_en_carrito)
-'''
+        producto_id = producto_en_carrito.producto_id
+        cantidad = producto_en_carrito.cantidad
+        producto = Producto.query.get(producto_id)
+
+        if producto:
+            nombre = producto.nombre
+            precio = producto.precio
+            precio_total = precio * cantidad
+
+            productos_info.append({'nombre': nombre, 'cantidad': cantidad, 'precio': precio, 'precio_total': precio_total})
+
+    return render_template('carrito_de_compra.html', productos_info=productos_info)
+
+@app.route('/eliminar_producto_carrito', methods=['POST'])
+def eliminar_producto_carrito():
+    accion = request.form['accion']
+    if accion == 'borrar':
+        productos_a_borrar = request.form.getlist('borrar_producto')
+        # Aquí puedes realizar la lógica para borrar los productos seleccionados
+    elif accion == 'pagar':
+        return redirect(url_for('index'))
