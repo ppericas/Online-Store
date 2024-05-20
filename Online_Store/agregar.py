@@ -1,6 +1,6 @@
 # store/agregar.py
 from flask import Flask, render_template, request, redirect, url_for
-from app import app, db, Producto
+from app import app, db, Producto, Categoria
 
 @app.route('/agregar_producto', methods=['GET', 'POST'])
 def agregar_producto():

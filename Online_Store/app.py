@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mi_base_de_datos.db'
@@ -63,6 +63,36 @@ class DetallePedido(db.Model):
     producto_id = db.Column(db.Integer, db.ForeignKey('productos.producto_id'), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     precio_unitario = db.Column(db.Float, nullable=False)
+
+
+@app.route('/agregar_producto', methods=['GET', 'POST'])
+def agregar_producto():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        descripcion = request.form['descripcion']
+        precio = float(request.form['precio'])
+        disponibilidad = request.form.get('disponibilidad') == 'on'
+        categoria_id = int(request.form['categoria'])
+
+        nuevo_producto = Producto(
+            nombre=nombre,
+            descripcion=descripcion,
+            precio=precio,
+            disponibilidad=disponibilidad,
+            categoria_id=categoria_id
+        )
+        db.session.add(nuevo_producto)
+        db.session.commit()
+        return redirect(url_for('agregar_producto'))
+
+    return render_template('agregar_producto.html')
+
+@app.route('/ver_productos', methods=['GET'])
+def ver_productos():
+    productos = Producto.query.all()
+    print(productos)
+    return render_template('ver_productos.html', productos=productos)
+
 
 if __name__ == '__main__':
     with app.app_context():
