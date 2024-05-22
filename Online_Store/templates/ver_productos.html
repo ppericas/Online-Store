@@ -13,9 +13,9 @@
             <p>Disponibilidad: {% if producto.disponibilidad %}Disponible{% else %}No disponible{% endif %}</p>
             <p>Categoría: {{ producto.categoria.nombre }}</p>
             <!-- Agregar imagen si es necesario -->
-            {% if producto.imagen %}
+            <!-- {% if producto.imagen %}
             <img src="{{ url_for('static', filename='imgs/' + producto.imagen) }}" alt="Imagen del producto">
-            {% endif %}
+            {% endif %} -->
         </li>
         {% endfor %}
     </ul>
