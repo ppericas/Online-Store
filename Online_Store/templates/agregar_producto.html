@@ -21,11 +21,15 @@
     <input type="text" id="disponibilidad" name="disponibilidad" required><br>
 
     <label for="categoria">Categoría:</label>
-    <input type="text" id="categoria" name="categoria" required><br>
+        <select id="categoria" name="categoria" required>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.categoria_id }}">{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select><br>
 
     <br>
-    <label for="imagen">Imagen:</label>
-    <input type="file" name="imagen" id="imagen" accept="image/*" required>
+    <label for="url_imagen">Imagen:</label>
+    <input type="file" name="url_imagen" id="url_imagen" accept="image/*" required>
     <br>
 
     <button type="submit">Agregar Producto</button>
