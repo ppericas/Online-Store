@@ -95,24 +95,44 @@ def ver_productos():
     productos = Producto.query.all()
     print(productos)
     return render_template('ver_productos.html', productos=productos)
-@app.route('/carrito_de_compra')
+@app.route('/carrito_de_compra',methods=['GET', 'POST'])
 def carrito_de_compra():
-    productos_en_carrito = ProductoEnCarrito.query.all()
-    productos_info = []
-    for producto_en_carrito in productos_en_carrito:
+        # Realizar una consulta para obtener información de productos en el carrito y sus detalles
+        productos_en_carrito = db.session.query(ProductoEnCarrito, Producto).\
+            join(ProductoEnCarrito.producto).all()
 
-        producto_id = producto_en_carrito.producto_id
-        cantidad = producto_en_carrito.cantidad
-        producto = Producto.query.get(producto_id)
+        # Crear una lista de diccionarios con la información de los productos en el carrito
+        productos_info = []
+        for producto_en_carrito, producto in productos_en_carrito:
+            print("Nombre del producto:", producto.nombre)
+            print("Descripción del producto:", producto.descripcion)
+            print("Precio del producto:", producto.precio)
+            print("Cantidad en el carrito:", producto_en_carrito.cantidad)
+            print("URL de la imagen del producto:", producto.url_imagen)
 
-        if producto:
-            nombre = producto.nombre
-            precio = producto.precio
-            precio_total = precio * cantidad
+            productos_info.append({
+                'producto_carrito_id': producto_en_carrito.producto_carrito_id, 
+                'nombre': producto.nombre,
+                'descripcion': producto.descripcion,
+                'precio': producto.precio,
+                'cantidad': producto_en_carrito.cantidad,
+                'url_imagen': producto.url_imagen
+            })
 
-            productos_info.append({'nombre': nombre, 'cantidad': cantidad, 'precio': precio, 'precio_total': precio_total})
+        print("Productos en el carrito:", productos_info)
 
-    return render_template('carrito_de_compra.html', productos_info=productos_info)
+        return render_template('carrito_de_compra.html', productos_info=productos_info)
+
+@app.route('/borrar_productos_seleccionados', methods=['POST'])
+def borrar_productos_seleccionados():
+    data = request.get_json()
+    productos_seleccionados = data.get('productos', [])
+    for producto_id in productos_seleccionados:
+        producto_en_carrito = ProductoEnCarrito.query.filter_by(producto_carrito_id=producto_id).first()
+        if producto_en_carrito:
+            db.session.delete(producto_en_carrito)
+            db.session.commit()
+    return jsonify({'message': 'Productos eliminados correctamente'})
 
 @app.route('/eliminar_producto_carrito', methods=['POST'])
 def eliminar_producto_carrito():
