@@ -3,51 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+    <title>Carrito de Compra</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 <body>
-
-<form action="{{ url_for('eliminar_producto_carrito') }}" method="post">
+<form id="carrito_form">
     <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>IMAGEN</th>
+                <th></th>
                 <th>NOMBRE PRODUCTO</th>
                 <th>CANTIDAD</th>
-                <th>PRECIO UNIT</th>
+                <th>PRECIO UNITARIO</th>
                 <th>TOTAL</th>
                 <th>BORRAR</th>
             </tr>
         </thead>
         <tbody>
-            
-            <tr>
-                {% for producto in productos_info %}
-                <td><img src="{{ producto.imagen_url }}" alt="Imagen del producto" style="width:50px;height:50px;"></td>
+            {% for producto in productos_info %}
+            <tr id="producto-{{ producto.producto_carrito_id }}">
+                <td>{{ producto.producto_carrito_id }}</td>
                 <td>{{ producto.nombre }}</td>
                 <td>{{ producto.cantidad }}</td>
-                <td>{{ producto.precio_unitario }}</td>
-                <td>{{ producto.cantidad * producto.precio_unitario }}</td>        
-                <td><input type="checkbox" name="borrar_producto" value="{{ producto.producto_id }}"></td>
-                {% endfor %}
+                <td>{{ producto.precio }}</td>
+                <td>{{ producto.precio * producto.cantidad }}</td>
+                <td><input type="checkbox" name="check_list_borrar[]" value="{{ producto.producto_carrito_id }}"></td>
             </tr>
-
+            {% endfor %}
         </tbody>
     </table>
-    <button type="submit" name="accion" value="borrar">Borrar Productos Seleccionados</button>
-    <button type="submit" name="accion" value="pagar">pagar</button>
+    <button type="button" id="boton_borrar">Boton_borrar</button>
 </form>
+<button type="button" id="boton_pagar">Pagar</button>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#example').DataTable({
-            paging: {
-                paging: true, 
-                searching: true,  
-                ordering: true 
-            }
+            paging: true,
+            searching: true,
+            ordering: true
         });
+    });
+
+    document.getElementById('boton_borrar').addEventListener('click', function() {
+        var selected = [];
+        document.querySelectorAll('input[name="check_list_borrar[]"]:checked').forEach(function(checkbox) {
+            selected.push(checkbox.value);
+        });
+
+        if (selected.length > 0) {
+            $.ajax({
+                url: "{{ url_for('borrar_productos_seleccionados') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ productos: selected }),
+                success: function(response) {
+                    selected.forEach(function(id) {
+                        var row = document.getElementById('producto-' + id);
+                        if (row) {
+                            row.remove();
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error al eliminar los productos.');
+                }
+            });
+        } else {
+            alert('No hay productos seleccionados para eliminar.');
+        }
+    });
+
+    document.getElementById('boton_pagar').addEventListener('click', function() {
+        alert('Función de pago no implementada.');
     });
 </script>
 </body>
