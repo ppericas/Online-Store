@@ -1,8 +1,11 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template,redirect,request,url_for
+from flask import Flask, render_template,redirect,request,url_for,jsonify
 from flask_migrate import Migrate
-
+from forms import*
+from wtforms import StringField,PasswordField,SubmitField
+from wtforms.validators import *
+from flask_login import*
 
 
 app = Flask(__name__)
@@ -11,7 +14,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
 
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
@@ -22,6 +28,9 @@ class Usuario(db.Model):
     fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
     carritos = db.relationship('CarritoDeCompra', backref='usuario', lazy=True)
     pedidos = db.relationship('Pedido', backref='usuario', lazy=True)
+
+    def get_id(self):
+        return str(self.usuario_id)  # Devuelve el 'usuario_id' como una cadena
 
 class Categoria(db.Model):
     __tablename__ = 'categorias'
@@ -158,6 +167,44 @@ def eliminar_producto_carrito():
         # Aquí puedes realizar la lógica para borrar los productos seleccionados
     elif accion == 'pagar':
         return redirect(url_for('index'))
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    form = SignupForm()  
+    if form.validate_on_submit(): 
+        fecha_registro = datetime.now() 
+
+        nuevo_usuario = Usuario(
+            nombre=form.name.data,
+            correo_electronico=form.email.data,
+            contraseña=form.password.data,
+            fecha_registro=fecha_registro
+        )
+
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+
+        return redirect(url_for('carrito_de_compra'))  
+    return render_template('registro.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        correo_electronico = request.form['correo_electronico']
+        contraseña = request.form['contraseña']
+
+        # Verificar si el usuario existe y si la contraseña es válida
+        usuario = Usuario.query.filter_by(correo_electronico=correo_electronico).first()
+        if usuario and usuario.contraseña == contraseña:
+            # Iniciar sesión al usuario
+            login_user(usuario)
+            return redirect(url_for('carrito_de_compra'))
+
+    return render_template('login.html')
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
 
 if __name__ == '__main__':
     with app.app_context():
