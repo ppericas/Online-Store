@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask,render_template,redirect,request,url_for,jsonify
+from flask import Flask, render_template,redirect,request,url_for,jsonify
 from flask_migrate import Migrate
 from forms import*
 from wtforms import StringField,PasswordField,SubmitField
@@ -81,6 +81,7 @@ class DetallePedido(db.Model):
 
 
 @app.route('/agregar_producto', methods=['GET', 'POST'])
+@login_required
 def agregar_producto():
     if request.method == 'POST':
         nombre = request.form['nombre']
@@ -104,6 +105,7 @@ def agregar_producto():
 
 
 @app.route('/agregar_categoria', methods=['GET', 'POST'])
+@login_required
 def agregar_categoria():
     if request.method == 'POST':
         nombre = request.form['nombre']
@@ -115,16 +117,17 @@ def agregar_categoria():
 
     return render_template('agregar_categoria.html')
 
+
 @app.route('/ver_productos', methods=['GET'])
 def ver_productos():
     productos = Producto.query.all()
     print(productos)
     return render_template('ver_productos.html', productos=productos)
-@app.route('/carrito_de_compra',methods=['GET', 'POST'])
-def carrito_de_compra():
-        if not current_user.is_authenticated:
-            return redirect(url_for('login'))
 
+
+@app.route('/carrito_de_compra',methods=['GET', 'POST'])
+@login_required
+def carrito_de_compra():
         # Realizar una consulta para obtener información de productos en el carrito y sus detalles
         productos_en_carrito = db.session.query(ProductoEnCarrito, Producto).\
             join(ProductoEnCarrito.producto).all()
@@ -152,6 +155,7 @@ def carrito_de_compra():
         return render_template('carrito_de_compra.html', productos_info=productos_info)
 
 @app.route('/borrar_productos_seleccionados', methods=['POST'])
+@login_required
 def borrar_productos_seleccionados():
     data = request.get_json()
     productos_seleccionados = data.get('productos', [])
@@ -163,6 +167,7 @@ def borrar_productos_seleccionados():
     return jsonify({'message': 'Productos eliminados correctamente'})
 
 @app.route('/eliminar_producto_carrito', methods=['POST'])
+@login_required
 def eliminar_producto_carrito():
     accion = request.form['accion']
     if accion == 'borrar':
@@ -208,13 +213,6 @@ def login():
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
-
-@app.route('/cerrar_sesion', methods=['POST'])
-def cerrar_sesion():
-   
-    logout_user()
-    return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     with app.app_context():
