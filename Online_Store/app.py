@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template,redirect,request,url_for,jsonify
+from flask import Flask,render_template,redirect,request,url_for,jsonify
 from flask_migrate import Migrate
 from forms import*
 from wtforms import StringField,PasswordField,SubmitField
@@ -122,6 +122,9 @@ def ver_productos():
     return render_template('ver_productos.html', productos=productos)
 @app.route('/carrito_de_compra',methods=['GET', 'POST'])
 def carrito_de_compra():
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
+
         # Realizar una consulta para obtener información de productos en el carrito y sus detalles
         productos_en_carrito = db.session.query(ProductoEnCarrito, Producto).\
             join(ProductoEnCarrito.producto).all()
@@ -205,6 +208,13 @@ def login():
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
+
+@app.route('/cerrar_sesion', methods=['POST'])
+def cerrar_sesion():
+   
+    logout_user()
+    return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     with app.app_context():

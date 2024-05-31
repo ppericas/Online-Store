@@ -12,7 +12,11 @@
             
         </nav>
     </header>
-
+    <div>
+        {% if usuario %}
+            <p>Bienvenido, {{ usuario.nombre }}</p>
+        {% endif %}
+    </div>
     <main>
         {% block content %}{% endblock %}
     </main>
