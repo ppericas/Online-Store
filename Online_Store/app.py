@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-class Usuario(db.Model):
+class Usuario(db.Model,UserMixin):
     __tablename__ = 'usuarios'
     usuario_id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
@@ -30,7 +30,7 @@ class Usuario(db.Model):
     pedidos = db.relationship('Pedido', backref='usuario', lazy=True)
 
     def get_id(self):
-        return str(self.usuario_id)  # Devuelve el 'usuario_id' como una cadena
+        return str(self.usuario_id)  
 
 class Categoria(db.Model):
     __tablename__ = 'categorias'
@@ -78,6 +78,8 @@ class DetallePedido(db.Model):
     producto_id = db.Column(db.Integer, db.ForeignKey('productos.producto_id'), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     precio_unitario = db.Column(db.Float, nullable=False)
+
+
 
 
 @app.route('/agregar_producto', methods=['GET', 'POST'])
@@ -214,6 +216,7 @@ def cerrar_sesion():
    
     logout_user()
     return redirect(url_for('login'))
+
 
 
 if __name__ == '__main__':
