@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compra</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+</head>
+<body>
+<form id="carrito_form">
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>NOMBRE PRODUCTO</th>
+                <th>CANTIDAD</th>
+                <th>PRECIO UNITARIO</th>
+                <th>TOTAL</th>
+                <th>BORRAR</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos_info %}
+            <tr id="producto-{{ producto.producto_carrito_id }}">
+                <td>{{ producto.producto_carrito_id }}</td>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>{{ producto.precio }}</td>
+                <td>{{ producto.precio * producto.cantidad }}</td>
+                <td><input type="checkbox" name="check_list_borrar[]" value="{{ producto.producto_carrito_id }}"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" id="boton_borrar">Boton_borrar</button>
+</form>
+<button type="button" id="boton_pagar">Pagar</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true
+        });
+    });
+
+    document.getElementById('boton_borrar').addEventListener('click', function() {
+        var selected = [];
+        document.querySelectorAll('input[name="check_list_borrar[]"]:checked').forEach(function(checkbox) {
+            selected.push(checkbox.value);
+        });
+
+        if (selected.length > 0) {
+            $.ajax({
+                url: "{{ url_for('borrar_productos_seleccionados') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ productos: selected }),
+                success: function(response) {
+                    selected.forEach(function(id) {
+                        var row = document.getElementById('producto-' + id);
+                        if (row) {
+                            row.remove();
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error al eliminar los productos.');
+                }
+            });
+        } else {
+            alert('No hay productos seleccionados para eliminar.');
+        }
+    });
+
+    document.getElementById('boton_pagar').addEventListener('click', function() {
+        alert('Función de pago no implementada.');
+    });
+</script>
+</body>
+</html>
