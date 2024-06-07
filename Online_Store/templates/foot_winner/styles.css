@@ -1,0 +1,427 @@
+/* variables */
+:root {
+  --brown: #754B2D;
+  --red: #74010D;
+  --orange: #F7941D;
+  --beige: #FED3A6;
+  --grey: #DEDCDB;
+}
+
+/* reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: grey;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* fonts */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 4em;
+}
+
+/* base styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #FFF;
+  width: 100%;
+}
+
+.logo {
+  padding-bottom: 100px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.upper {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: var(--grey);
+}
+
+.mid {
+  padding: 5px;
+  background-color: var(--grey);
+  display: flex;
+  justify-content: center;
+}
+
+.mid-container {
+  width: 98%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-box {
+  font-size:1.4rem;
+  min-width: 70%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0px solid #ccc;
+  border-radius: 5px;
+}
+
+.mid-button{
+  margin-left: 5px;
+  min-width: 10%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: white;
+  background-color: #E9E9ED;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner {
+  min-height: 98vh;
+  background: no-repeat center/95% url('assets/others/banner.webp');
+}
+
+.products {
+  padding-top: 20px;
+  display: flex;
+  justify-content:space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  background-color: var(--grey);
+}
+
+.products a{
+  padding: 24px;
+  min-height: 100%;
+  min-width: auto;
+  background-color: #E9E9ED;
+  color: black;
+  flex: 1;
+
+}
+
+.brands {
+  padding-top: 20px;
+  display: flex;
+  justify-content:space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.retail {
+  min-height: 98vh;
+  background: no-repeat center/95% url('assets/others/retail.webp');
+}
+
+/* footer */
+.footer {
+  background-color: var(--grey); /* Puedes usar tu color preferido */
+  color: white;
+  padding: 20px 0; /* Ajusta el espacio interno según tus preferencias */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo img {
+  margin-right: 10px;
+}
+
+.footer-links ul {
+  list-style-type: none;
+  display: flex;
+}
+
+.footer-links li {
+  margin-right: 20px;
+}
+
+.copyright {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* shoes */
+.cart-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #FFF;
+  flex-wrap: wrap;
+}
+
+.carts {
+  padding: 10px;
+  flex: 0 0 calc(50% - 5px); /* Establece un ancho del 50% con un espacio de 5px entre elementos */
+}
+
+.carts img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.modal-dialog {
+  width: 100%;
+}
+
+.modal-title {
+  margin: 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-body {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.modal-cart {
+  max-height: 64px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+ 
+
+.login-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #FFF;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form label {
+  margin-bottom: 8px;
+}
+
+.login-form input {
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+}
+
+.login-form button {
+  padding: 12px;
+  background-color: var(--brown);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: var(--orange);
+}
+
+.about-section,
+.terms-section,
+.categories-section,
+.contact-section {
+  background-color: var(--grey);
+  padding: 40px 0;
+}
+
+.about-section h2,
+.terms-section h2,
+.categories-section h2,
+.contact-section h2 {
+  color: var(--brown);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.categories-section ul {
+  list-style-type: none;
+}
+
+.categories-section ul li {
+  margin-bottom: 10px;
+}
+
+.categories-section a {
+  text-decoration: none;
+  color: var(--brown);
+}
+
+.categories-section a:hover {
+  color: var(--orange);
+}
+
+
+/* Icona de la cistella */
+.basket-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.basket-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--brown);
+}
+
+.basket-link img {
+  margin-right: 32px;
+}
+
+.basket-count {
+  background-color: var(--orange);
+  color: white;
+  border-radius: 50%;
+  padding: 4px 8px;
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+
+/* xs*/
+@media (min-width: 200px) {
+  .container {
+    max-width: 640px;
+  }
+
+  body {
+    font-size: 18px;
+  }
+
+  .modal-body img {
+    max-width: 124px;
+  }
+  
+}
+
+/* s */
+@media (min-width: 640px) {
+  .container {
+    max-width: 768px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+  .modal-body img {
+    max-width: 248px;
+  }
+}
+
+/* m */
+@media (min-width: 768px) {
+  .container {
+    max-width: 1024px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .modal-body img {
+    max-width: 512px;
+  }
+}
+
+/* l */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1280px;
+  }
+
+  body {
+    font-size: 18px;
+  }
+}
+
+/* xl */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1536px;
+  }
+
+  body {
+    font-size: 20px;
+  }
+}
+
+/* 2xl */
+@media (min-width: 1536px) {
+  .container {
+    max-width: 2060px;
+  }
+  body {
+    font-size: 22px;
+  }
+}
