@@ -81,6 +81,13 @@ class DetallePedido(db.Model):
 
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/agregar_producto', methods=['GET', 'POST'])
 def agregar_producto():
@@ -103,7 +110,6 @@ def agregar_producto():
         return redirect(url_for('agregar_producto'))
 
     return render_template('agregar_producto.html')
-
 
 @app.route('/agregar_categoria', methods=['GET', 'POST'])
 def agregar_categoria():
@@ -169,7 +175,7 @@ def eliminar_producto_carrito():
     accion = request.form['accion']
     if accion == 'borrar':
         productos_a_borrar = request.form.getlist('borrar_producto')
-        # Aquí puedes realizar la lógica para borrar los productos seleccionados
+        
     elif accion == 'pagar':
         return redirect(url_for('index'))
 
@@ -189,7 +195,7 @@ def registro():
         db.session.add(nuevo_usuario)
         db.session.commit()
 
-        return redirect(url_for('carrito_de_compra'))  
+        return redirect(url_for('index'))  
     return render_template('registro.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -197,27 +203,21 @@ def login():
     if request.method == 'POST':
         correo_electronico = request.form['correo_electronico']
         contraseña = request.form['contraseña']
-
-        # Verificar si el usuario existe y si la contraseña es válida
         usuario = Usuario.query.filter_by(correo_electronico=correo_electronico).first()
         if usuario and usuario.contraseña == contraseña:
-            # Iniciar sesión al usuario
+            
             login_user(usuario)
-            return redirect(url_for('carrito_de_compra'))
+            return redirect(url_for('index'))
 
     return render_template('login.html')
 
-@login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(int(user_id))
+
 
 @app.route('/cerrar_sesion', methods=['POST'])
 def cerrar_sesion():
    
     logout_user()
     return redirect(url_for('login'))
-
-
 
 if __name__ == '__main__':
     with app.app_context():
