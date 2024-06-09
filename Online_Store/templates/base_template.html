@@ -1,29 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{/static/css/styles.css}">
 </head>
+
 <body>
+    <nav class="navbar container">
+        <!-- Logo + Título -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='assets/logos/logo-white.png') }}" alt="Logo" width="200">
+            <h1>Foot Looser</h1>
+        </div>
+        <div class="upper">
+            <a href="#"><img src="{{ url_for('static', filename='assets/others/lenguaje-spanish.png') }}" alt="Spanish" width="20">Español</a>
+            <a href="#">Encontrar una tienda</a>
+            <a href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='assets/icons/avatar.png') }}" alt="avatar" width="20">Iniciar sesión</a>
+        </div>
+    </nav>
+
+    <div class="basket-icon">
+        <a href="#" class="basket-link">
+            <img src="{{ url_for('static', filename='assets/icons/shoping-cart.png') }}" alt="Cistella" width="30">
+            <span class="basket-count">3</span>
+        </a>
+    </div>
+
     <header>
         <nav>
-            
+            <!-- Aquí puedes agregar más elementos de navegación si es necesario -->
         </nav>
     </header>
+
     <div>
         {% if usuario %}
             <p>Bienvenido, {{ usuario.nombre }}</p>
         {% endif %}
     </div>
+
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2024 My Flask App</p>
-    </footer>
+    <section class="terms-section">
+        <div class="container">
+            <h2>Términos y Condiciones</h2>
+            <p>Lee nuestros términos y condiciones antes de realizar cualquier compra. Asegúrate de comprender las políticas de devolución y otras informaciones relevantes.</p>
+        </div>
+    </section>
 
+    <section class="contact-section">
+        <div class="container">
+            <h2>Contacto</h2>
+            <p>Para consultas, contáctanos a través del correo electrónico <a href="mailto:info@footlooser.com">info@footlooser.com</a>.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='assets/logos/logo-white.png') }}" alt="Logo del pie de página" width="100">
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Acerca de nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="copyright">© 2023 Footlooserdotcom, Inc. Todos los derechos reservados</p>
+        </div>
+    </footer>
 </body>
+
 </html>
